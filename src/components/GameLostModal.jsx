@@ -1,26 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
-import { RiErrorWarningLine } from "react-icons/ri";
-const SwitchWalletModal = () => {
+
+const GameLostModal = () => {
   return (
     <Container>
       <ModalContainer>
-        <Warning>
-          <RiErrorWarningLine size={24} style={{ margin: " 0 4px " }} />
-          You are connected to Ethereum mainnet
-        </Warning>
-        <ModalHeader>Switch to polygon mainnet ?</ModalHeader>
-        <Subtitle>We use polygon for all the transactions</Subtitle>
+        <Emoji>😵</Emoji>
+        <ModalHeader>Uh-oh! You got rugged!</ModalHeader>
+        <Subtitle>Keep going, Give it another shot!</Subtitle>
+
         <ButtonContainer>
           <Button style={{ width: "200px" }} variant="disabled">
-            Cancel
+            I'm leaving
           </Button>
           <Button style={{ width: "200px" }} variant="secondary">
-            Sign & Confirm
+            Degen Again
           </Button>
         </ButtonContainer>
-        <Link>No, I would like to manually change the network</Link>
       </ModalContainer>
     </Container>
   );
@@ -39,11 +36,11 @@ const Container = styled.div`
 
 const ModalContainer = styled.div`
   width: 620px;
-  height: 360px;
+  height: 344px;
   display: flex;
-
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 48px;
   background: #ffffff;
   border: 3px solid #000000;
@@ -58,47 +55,32 @@ const ModalHeader = styled.div`
   color: #000000;
   text-align: center;
   letter-spacing: -0.05em;
-  margin: 12px;
+  margin: 20px;
 `;
 
 const Subtitle = styled.div`
   font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 18px;
+  line-height: 34px;
   color: #545454;
   text-align: center;
   letter-spacing: -0.04em;
   /* margin: 12px 0; */
+  span {
+    color: #000;
+  }
 `;
 
-const Warning = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 20px;
-  background: #f3d9ff;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 17px;
-  color: #c16aea;
-`;
 const ButtonContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  margin: 24px;
+  margin-top: 24px;
 `;
-const Link = styled.a`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: #545454;
-  text-align: center;
-  letter-spacing: -0.04em;
-  margin: 16px 0;
-  text-decoration: underline;
+
+const Emoji = styled.div`
+  font-size: 40px;
 `;
-export default SwitchWalletModal;
+export default GameLostModal;

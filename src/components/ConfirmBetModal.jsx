@@ -50,15 +50,14 @@ const Container = styled.div`
 
 const ModalContainer = styled.div`
   width: 620px;
-  height: 310px;
+  height: 450px;
   display: flex;
-
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 48px;
   background: #ffffff;
-  border: 1px solid #000000;
+  border: 3px solid #000000;
   box-shadow: 4px 4px 0px #000000;
 `;
 
@@ -108,16 +107,7 @@ const ButtonContainer = styled.div`
   align-items: center;
   margin-top: 24px;
 `;
-const Link = styled.a`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: #545454;
-  text-align: center;
-  letter-spacing: -0.04em;
-  margin: 16px 0;
-  text-decoration: underline;
-`;
+
 const TransactionContainer = styled.div`
   width: 100%;
   display: flex;
@@ -128,6 +118,7 @@ const Transaction = styled.div`
   font-weight: 400;
   font-size: 18px;
   line-height: 22px;
+  margin: 12px 0;
   /* identical to box height */
 
   color: #000000;

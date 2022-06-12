@@ -34,7 +34,7 @@ const ModalContainer = styled.div`
   align-items: center;
   padding: 24px 24px 0px;
   background: #ffffff;
-  border: 1px solid #000000;
+  border: 3px solid #000000;
   box-shadow: 4px 4px 0px #000000;
 `;
 const QrCodeContainer = styled.div`

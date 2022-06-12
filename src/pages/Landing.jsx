@@ -4,10 +4,13 @@ import Navbar from "../components/Navbar";
 import landing_left_card from "../assets/images/landing_left_card.png";
 import landing_right_card from "../assets/images/landing_right_card.png";
 import Button from "../components/Button";
-import GameLoadingModal from "../components/GameLoadingModal";
-import GenerateCardModal from "../components/GenerateCardModal";
-import DrawingCardModal from "../components/DrawingCardModal";
-import ConfirmBetModal from "../components/ConfirmBetModal";
+// import GameLoadingModal from "../components/GameLoadingModal";
+// import GenerateCardModal from "../components/GenerateCardModal";
+// import DrawingCardModal from "../components/DrawingCardModal";
+// import ConfirmBetModal from "../components/ConfirmBetModal";
+// import GameLostModal from "../components/GameLostModal";
+// import GameWonModal from "../components/GameWonModal";
+// import TippingModal from "../components/TippingModal";
 const Landing = () => {
   return (
     <Container>
@@ -36,7 +39,10 @@ const Landing = () => {
       {/* <GameLoadingModal /> */}
       {/* <GenerateCardModal /> */}
       {/* <DrawingCardModal /> */}
-      <ConfirmBetModal />
+      {/* <ConfirmBetModal /> */}
+      {/* <GameLostModal /> */}
+      {/* <GameWonModal /> */}
+      {/* <TippingModal /> */}
     </Container>
   );
 };
