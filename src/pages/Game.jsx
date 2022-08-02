@@ -2,17 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import landing_left_card from "../assets/images/landing_left_card.png";
+import UpK from "../assets/images/UpK.png";
+import DownA from "../assets/images/DownA.png";
 import landing_right_card from "../assets/images/landing_right_card.png";
 import Button from "../components/Button";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { TbArrowRight } from "react-icons/tb";
 const Game = () => {
+  const flipCard = () => {};
   return (
     <Container>
       <Navbar />
       <ContentContainer>
         <Left>
-          <img src={landing_left_card} alt="left_card" />
+          <LeftCard>
+            <img src={UpK} alt="left_card" />
+            <CardContainer>
+              <Button onClick={flipCard}> Click to flip</Button>
+            </CardContainer>
+            <img src={DownA} alt="left_card" />
+          </LeftCard>
+          Your Card
         </Left>
         <Middle>
           <Title>I Bet next card is</Title>
@@ -61,19 +71,40 @@ const Game = () => {
           </Button>
         </Middle>
         <Right>
-          <img src={landing_right_card} alt="right_card" />
+          <LeftCard>
+            <img src={UpK} alt="left_card" />
+            <CardContainer>Random card from the deck</CardContainer>
+            <img src={DownA} alt="left_card" />
+          </LeftCard>
+          Your Card
         </Right>
       </ContentContainer>
     </Container>
   );
 };
 const Container = styled.div``;
+const CardContainer = styled.div`
+  width: 275px;
+  height: 394px;
+  border: 2px dashed #000;
+  border-radius: 24px;
+  margin: 0 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const ContentContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 `;
-const Left = styled.div``;
+const Left = styled.div`
+  text-align: center;
+`;
+const LeftCard = styled.div`
+  display: flex;
+  margin-bottom: 12px;
+`;
 const Middle = styled.div`
   display: flex;
   flex-direction: column;
@@ -82,7 +113,9 @@ const Middle = styled.div`
   text-align: center;
   max-width: 320px;
 `;
-const Right = styled.div``;
+const Right = styled.div`
+  text-align: center;
+`;
 const Title = styled.div`
   font-weight: 500;
   font-size: 20px;

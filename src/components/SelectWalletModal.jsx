@@ -5,26 +5,26 @@ import rainbow_icon from "../assets/images/rainbow_icon.png";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
 import { VscLock } from "react-icons/vsc";
-const SelectWalletModal = () => {
+const SelectWalletModal = ({ connect }) => {
   return (
     <Container>
       <ModalContainer>
         <ModalHeader>Choose your preferred wallet</ModalHeader>
-        <WalletCard>
+        <WalletCard onClick={() => connect()}>
           MetaMask
           <WalletIconContainer>
             <img src={metamask_icon} alt="metamask_icon" />
             <MdOutlineArrowForwardIos color="rgba(196, 198, 202, 1)" />
           </WalletIconContainer>
         </WalletCard>
-        <WalletCard>
+        {/* <WalletCard>
           Rainbow
           <WalletIconContainer>
             <img src={rainbow_icon} alt="rainbow_icon" />
             <MdOutlineArrowForwardIos color="rgba(196, 198, 202, 1)" />
           </WalletIconContainer>
-        </WalletCard>
-        <Subtitle>View QR code instead</Subtitle>
+        </WalletCard> */}
+        {/* <Subtitle>View QR code instead</Subtitle> */}
         <Divider />
         <ModalFooter>
           <FooterCard>
@@ -64,7 +64,7 @@ const Container = styled.div`
 `;
 const ModalContainer = styled.div`
   width: 380px;
-  height: 428px;
+  /* height: 428px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -95,6 +95,7 @@ const WalletCard = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 `;
 const WalletIconContainer = styled.div`
   display: flex;
