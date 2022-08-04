@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import landing_left_card from "../assets/images/landing_left_card.png";
@@ -8,7 +8,128 @@ import landing_right_card from "../assets/images/landing_right_card.png";
 import Button from "../components/Button";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { TbArrowRight } from "react-icons/tb";
+import { useContractWrite, useContract, useSigner, useAccount } from "wagmi";
+import HilowABI from "../abi/Hilow.json";
+import { HILOW_ADDRESS } from "../constants";
+import { ethers } from "ethers";
+
 const Game = () => {
+  const [contractLoaded, setContractLoaded] = useState(false);
+  const contractLoadedRef = useRef(contractLoaded);
+  contractLoadedRef.current = contractLoaded;
+
+  const { data: signer } = useSigner();
+  const { data: accountData } = useAccount();
+  const contractConfig = {
+    addressOrName: HILOW_ADDRESS,
+    contractInterface: HilowABI.abi,
+    signerOrProvider: signer,
+  };
+  const contract = useContract(contractConfig);
+  const { write: drawFirstCardTxn } = useContractWrite(
+    contractConfig,
+    "drawCard"
+  );
+  const { write: makeFirstBetTxn } = useContractWrite(
+    contractConfig,
+    "makeFirstBet"
+  );
+  const { write: makeSecondBetTxn } = useContractWrite(
+    contractConfig,
+    "makeSecondBet"
+  );
+
+  const findActiveGame = async () => {
+    const [activeGameFound, activeGame] = await contract.getActiveGame();
+    console.log(activeGameFound, activeGame);
+  };
+
+  const drawCard = () => {
+    drawFirstCardTxn();
+  };
+
+  const makeFirstBet = (higher, betAmount) => {
+    makeFirstBetTxn({
+      args: [higher],
+      overrides: {
+        value: ethers.utils.parseEther(betAmount.toString()),
+      },
+    });
+  };
+
+  const makeSecondBet = (higher, betAmount) => {
+    makeSecondBetTxn({
+      args: [higher],
+    });
+  };
+
+  useEffect(() => {
+    if (contract && !contractLoadedRef.current) {
+      try {
+        contract.on("CardDrawn", (player, firstDrawCard) => {
+          console.log(player, firstDrawCard);
+          if (player.toLowerCase() === accountData?.address?.toLowerCase()) {
+            // Manage card drawn state
+            const firstCardValue = firstDrawCard.toNumber();
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      try {
+        contract.on(
+          "FirstBetMade",
+          (player, firstDrawCard, secondDrawCard, isWin) => {
+            console.log(player, firstDrawCard, secondDrawCard, isWin);
+            if (player.toLowerCase() === accountData?.address?.toLowerCase()) {
+              // Manage first bet made state
+              const firstCardValue = firstDrawCard.toNumber();
+              const secondCardValue = secondDrawCard.toNumber();
+            }
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+
+      try {
+        contract.on(
+          "GameFinished",
+          (
+            player,
+            firstDrawCard,
+            secondDrawCard,
+            thirdDrawCard,
+            isWin,
+            payoutMultiplier,
+            payoutAmount
+          ) => {
+            console.log(
+              player,
+              firstDrawCard,
+              secondDrawCard,
+              thirdDrawCard,
+              isWin,
+              payoutMultiplier,
+              payoutAmount
+            );
+            if (player.toLowerCase() === accountData?.address?.toLowerCase()) {
+              // Manage second bet made and game finished state
+              const firstCardValue = firstDrawCard.toNumber();
+              const secondCardValue = secondDrawCard.toNumber();
+              const thirdCardValue = thirdDrawCard.toNumber();
+            }
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+
+      setContractLoaded(true);
+    }
+  }, [contract]);
+
   const flipCard = () => {};
   return (
     <Container>
@@ -82,6 +203,7 @@ const Game = () => {
     </Container>
   );
 };
+
 const Container = styled.div``;
 const CardContainer = styled.div`
   width: 275px;
