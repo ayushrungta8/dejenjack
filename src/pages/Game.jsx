@@ -88,7 +88,8 @@ const Game = () => {
       }
     };
     findActiveGame();
-  });
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     setShowFirstGameWonModal(firstGameWon);
