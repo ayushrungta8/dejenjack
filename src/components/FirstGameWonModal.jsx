@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
 
-const FirstGameWonModal = ({ makeSecondBet, setShowFirstGameWonModal }) => {
+const FirstGameWonModal = ({ setShowFirstGameWonModal }) => {
   return (
     <Container>
       <ModalContainer>
@@ -15,7 +15,6 @@ const FirstGameWonModal = ({ makeSecondBet, setShowFirstGameWonModal }) => {
             style={{ width: "200px" }}
             variant="secondary"
             onClick={() => {
-              makeSecondBet();
               setShowFirstGameWonModal(false);
             }}
           >

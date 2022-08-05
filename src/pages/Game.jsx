@@ -336,7 +336,6 @@ const Game = () => {
       {showFirstGameLostModal && <FirstGameLostModal />}
       {showFirstGameWonModal && (
         <FirstGameWonModal
-          makeSecondBet={makeSecondBet}
           setShowFirstGameWonModal={setShowFirstGameWonModal}
         />
       )}
