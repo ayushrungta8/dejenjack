@@ -1,5 +1,5 @@
 import React from "react";
-import { MdArrowRight } from "react-icons/md";
+
 import { VscArrowRight } from "react-icons/vsc";
 import styled from "styled-components";
 import Button from "./Button";
@@ -88,14 +88,5 @@ const ButtonContainer = styled.div`
 const Emoji = styled.div`
   font-size: 40px;
 `;
-const Link = styled.a`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: #545454;
-  text-align: center;
-  letter-spacing: -0.04em;
-  margin: 16px 0;
-  text-decoration: underline;
-`;
+
 export default BeginGameModal;

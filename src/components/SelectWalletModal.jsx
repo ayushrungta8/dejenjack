@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import metamask_icon from "../assets/images/metamask_icon.png";
-import rainbow_icon from "../assets/images/rainbow_icon.png";
+
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
 import { VscLock } from "react-icons/vsc";
@@ -105,15 +105,7 @@ const WalletIconContainer = styled.div`
     margin-right: 8px;
   }
 `;
-const Subtitle = styled.div`
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 18px;
-  text-align: center;
-  letter-spacing: -0.04em;
-  color: #8d9099;
-  margin: 12px 0;
-`;
+
 const Divider = styled.div`
   width: 100%;
   height: 1px;
