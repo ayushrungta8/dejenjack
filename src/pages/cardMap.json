@@ -1,0 +1,15 @@
+{
+  "1": ["ClubA", "DiamondA", "HeartA", "SpadeA"],
+  "2": ["Club2", "Diamond2", "Heart2", "Spade2"],
+  "3": ["Club3", "Diamond3", "Heart3", "Spade3"],
+  "4": ["Club4", "Diamond4", "Heart4", "Spade4"],
+  "5": ["Club5", "Diamond5", "Heart5", "Spade5"],
+  "6": ["Club6", "Diamond6", "Heart6", "Spade6"],
+  "7": ["Club7", "Diamond7", "Heart7", "Spade7"],
+  "8": ["Club8", "Diamond8", "Heart8", "Spade8"],
+  "9": ["Club9", "Diamond9", "Heart9", "Spade9"],
+  "10": ["Club10", "Diamond10", "Heart10", "Spade10"],
+  "11": ["ClubJ", "DiamondJ", "HeartJ", "SpadeJ"],
+  "12": ["ClubQ", "DiamondQ", "HeartQ", "SpadeQ"],
+  "13": ["ClubK", "DiamondK", "HeartK", "SpadeK"]
+}

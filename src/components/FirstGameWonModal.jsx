@@ -2,26 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
 
-const GameLostModal = () => {
+const FirstGameWonModal = ({ makeSecondBet, setShowFirstGameWonModal }) => {
   return (
     <Container>
       <ModalContainer>
-        <Emoji>😵</Emoji>
-        <ModalHeader>Uh-oh! You got rugged!</ModalHeader>
-        <Subtitle>Keep going, Give it another shot!</Subtitle>
+        <Emoji>🚀</Emoji>
+        <ModalHeader>Congratulations! You won the first hand!</ModalHeader>
+        <Subtitle>Can you win another though? 😏</Subtitle>
 
         <ButtonContainer>
           <Button
             style={{ width: "200px" }}
-            variant="disabled"
-            onClick={() => window.location.reload()}
+            variant="secondary"
+            onClick={() => {
+              makeSecondBet();
+              setShowFirstGameWonModal(false);
+            }}
           >
-            I'm leaving
-          </Button>
-          <Button style={{ width: "200px" }} variant="secondary">
-            Degen Again
+            Hit me!
           </Button>
         </ButtonContainer>
+        {/* <Link>I'd like to tip DegenJack</Link> */}
       </ModalContainer>
     </Container>
   );
@@ -40,7 +41,7 @@ const Container = styled.div`
 
 const ModalContainer = styled.div`
   width: 620px;
-  height: 344px;
+  /* height: 395px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,4 +88,14 @@ const ButtonContainer = styled.div`
 const Emoji = styled.div`
   font-size: 40px;
 `;
-export default GameLostModal;
+// const Link = styled.a`
+//   font-weight: 400;
+//   font-size: 16px;
+//   line-height: 19px;
+//   color: #545454;
+//   text-align: center;
+//   letter-spacing: -0.04em;
+//   margin: 16px 0;
+//   text-decoration: underline;
+// `;
+export default FirstGameWonModal;

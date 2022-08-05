@@ -4,7 +4,7 @@ import { VscArrowRight } from "react-icons/vsc";
 import styled from "styled-components";
 import Button from "./Button";
 
-const BeginGameModal = () => {
+const BeginGameModal = ({ onClick }) => {
   return (
     <Container>
       <ModalContainer>
@@ -15,7 +15,11 @@ const BeginGameModal = () => {
         </Subtitle>
 
         <ButtonContainer>
-          <Button style={{ width: "200px" }} variant="primary">
+          <Button
+            style={{ width: "200px" }}
+            variant="primary"
+            onClick={onClick}
+          >
             Let's Begin <VscArrowRight style={{ marginLeft: "8px" }} />
           </Button>
         </ButtonContainer>

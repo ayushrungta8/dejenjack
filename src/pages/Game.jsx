@@ -1,76 +1,158 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
-import landing_left_card from "../assets/images/landing_left_card.png";
 import UpK from "../assets/images/UpK.png";
 import DownA from "../assets/images/DownA.png";
-import landing_right_card from "../assets/images/landing_right_card.png";
 import Button from "../components/Button";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { TbArrowRight } from "react-icons/tb";
-import { useContractWrite, useContract, useSigner, useAccount } from "wagmi";
+import { useContract, useAccount } from "wagmi";
 import HilowABI from "../abi/Hilow.json";
 import { HILOW_ADDRESS } from "../constants";
 import { ethers } from "ethers";
-
+import useApnaContract from "../hooks/useContract";
+import Cards from "./cardMap.json";
+import GameWonModal from "../components/GameWonModal";
+import GameLostModal from "../components/GameLostModal";
+import FirstGameLostModal from "../components/FirstGameLostModal";
+import FirstGameWonModal from "../components/FirstGameWonModal";
 const Game = () => {
+  //states
+  const [firstCard, setFirstCard] = useState(0);
+  const [secondCard, setSecondCard] = useState(0);
+  const [thirdCard, setThirdCard] = useState(0);
+  const [higher, setHigher] = useState(null);
+  const [betAmount, setBetAmount] = useState(0);
+  const [firstPrediction, setFirstPrediction] = useState(null);
+  const [secondPrediction, setSecondPrediction] = useState(null);
+  const [choice, setChoice] = useState(0);
+  const [showGameWonModal, setShowGameWonModal] = useState(false);
+  const [showGameLostModal, setShowGameLostModal] = useState(false);
+  const [showFirstGameWonModal, setShowFirstGameWonModal] = useState(false);
+  const [showFirstGameLostModal, setShowFirstGameLostModal] = useState(false);
+  const [firstGameWon, setFirstGameWon] = useState(false);
+  const [firstGameLost, setFirstGameLost] = useState(false);
+  const [secondGameWon, setSecondGameWon] = useState(false);
+  const [secondGameLost, setSecondGameLost] = useState(false);
+
+  const bets = [0.05, 0.1, 0.25, 0.5, 1.0, 2.0];
+
+  //web3 hooks
   const [contractLoaded, setContractLoaded] = useState(false);
   const contractLoadedRef = useRef(contractLoaded);
   contractLoadedRef.current = contractLoaded;
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
 
-  const { data: signer } = useSigner();
-  const { data: accountData } = useAccount();
   const contractConfig = {
     addressOrName: HILOW_ADDRESS,
     contractInterface: HilowABI.abi,
     signerOrProvider: signer,
   };
+  const { address } = useAccount();
+
   const contract = useContract(contractConfig);
-  const { write: drawFirstCardTxn } = useContractWrite(
-    contractConfig,
-    "drawCard"
-  );
-  const { write: makeFirstBetTxn } = useContractWrite(
-    contractConfig,
-    "makeFirstBet"
-  );
-  const { write: makeSecondBetTxn } = useContractWrite(
-    contractConfig,
-    "makeSecondBet"
-  );
+  const contractReader = useApnaContract();
 
-  const findActiveGame = async () => {
-    const [activeGameFound, activeGame] = await contract.getActiveGame();
-    console.log(activeGameFound, activeGame);
+  const getRandomCard = (n) => {
+    const randomCard = Math.floor(Math.random() * Cards[n.toString()].length);
+    return Cards[n.toString()][randomCard];
   };
 
-  const drawCard = () => {
-    drawFirstCardTxn();
-  };
+  useEffect(() => {
+    const findActiveGame = async () => {
+      const [activeGameFound, activeGame] = await contract.getActiveGame();
+      console.log("activeGameFound", activeGameFound);
+      if (activeGameFound) {
+        console.log("activeGame", activeGame);
+        const tempFirstCard = activeGame.cards.firstDraw.value.toNumber();
+        tempFirstCard !== 0 && setFirstCard(tempFirstCard);
+        const tempSecondCard = activeGame.cards.secondDraw.value.toNumber();
+        tempSecondCard !== 0 && setSecondCard(tempSecondCard);
+        const tempThirdCard = activeGame.cards.thirdDraw.value.toNumber();
+        tempThirdCard !== 0 && setThirdCard(tempThirdCard);
 
-  const makeFirstBet = (higher, betAmount) => {
-    makeFirstBetTxn({
-      args: [higher],
-      overrides: {
+        const tempBetAmount = activeGame.betAmount.toString();
+        setBetAmount(tempBetAmount);
+
+        const tempFirstPrediction = activeGame.firstPrediction;
+        setFirstPrediction(tempFirstPrediction);
+
+        const tempSecondPrediction = activeGame.secondPrediction;
+        setSecondPrediction(tempSecondPrediction);
+
+        tempFirstCard !== 0 &&
+          tempBetAmount !== 0 &&
+          setChoice(tempFirstPrediction ? "high" : "low");
+        tempFirstCard !== 0 && tempSecondCard !== 0 && setFirstGameWon(true);
+      }
+    };
+    findActiveGame();
+  });
+
+  useEffect(() => {
+    setShowFirstGameWonModal(firstGameWon);
+    setShowFirstGameLostModal(firstGameLost);
+  }, [firstGameWon, firstGameLost]);
+  useEffect(() => {
+    setShowGameWonModal(secondGameWon);
+    setShowGameLostModal(secondGameLost);
+  }, [secondGameWon, secondGameLost]);
+
+  const drawFirstCard = async () => {
+    try {
+      await contractReader()().drawCard();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const makeFirstBet = async () => {
+    try {
+      await contractReader()().makeFirstBet(higher, {
         value: ethers.utils.parseEther(betAmount.toString()),
-      },
-    });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const makeSecondBet = async () => {
+    try {
+      setShowFirstGameWonModal(false);
+      await contractReader()().makeSecondBet(higher);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const makeSecondBet = (higher, betAmount) => {
-    makeSecondBetTxn({
-      args: [higher],
-    });
-  };
+  useEffect(() => {
+    console.log(
+      firstCard,
+      secondCard,
+      thirdCard,
+      betAmount,
+      higher,
+      firstPrediction,
+      secondPrediction
+    );
+  }, [
+    firstCard,
+    secondCard,
+    thirdCard,
+    betAmount,
+    higher,
+    firstPrediction,
+    secondPrediction,
+  ]);
 
   useEffect(() => {
     if (contract && !contractLoadedRef.current) {
       try {
         contract.on("CardDrawn", (player, firstDrawCard) => {
-          console.log(player, firstDrawCard);
-          if (player.toLowerCase() === accountData?.address?.toLowerCase()) {
-            // Manage card drawn state
-            const firstCardValue = firstDrawCard.toNumber();
+          // console.log(player, firstDrawCard);
+          // console.log("accountData", address);
+          if (player.toLowerCase() === address?.toLowerCase()) {
+            // console.log("firstDrawCard", firstDrawCard.toNumber());
+            setFirstCard(firstDrawCard.toNumber());
           }
         });
       } catch (error) {
@@ -81,11 +163,18 @@ const Game = () => {
         contract.on(
           "FirstBetMade",
           (player, firstDrawCard, secondDrawCard, isWin) => {
+            console.log("accountData", address);
             console.log(player, firstDrawCard, secondDrawCard, isWin);
-            if (player.toLowerCase() === accountData?.address?.toLowerCase()) {
+            if (player.toLowerCase() === address?.toLowerCase()) {
               // Manage first bet made state
-              const firstCardValue = firstDrawCard.toNumber();
-              const secondCardValue = secondDrawCard.toNumber();
+              console.log("firstDrawCard", firstDrawCard.toNumber());
+              console.log("secondDrawCard", secondDrawCard.toNumber());
+              setFirstCard(firstDrawCard.toNumber());
+              setSecondCard(secondDrawCard.toNumber());
+              isWin
+                ? setShowFirstGameWonModal(true)
+                : setShowFirstGameLostModal(true);
+              isWin ? setFirstGameWon(true) : setFirstGameLost(true);
             }
           }
         );
@@ -114,11 +203,15 @@ const Game = () => {
               payoutMultiplier,
               payoutAmount
             );
-            if (player.toLowerCase() === accountData?.address?.toLowerCase()) {
+            console.log("accountData", address);
+
+            if (player.toLowerCase() === address?.toLowerCase()) {
               // Manage second bet made and game finished state
-              const firstCardValue = firstDrawCard.toNumber();
-              const secondCardValue = secondDrawCard.toNumber();
-              const thirdCardValue = thirdDrawCard.toNumber();
+              console.log("th", thirdDrawCard.toNumber());
+              setFirstCard(secondDrawCard.toNumber());
+              setSecondCard(thirdDrawCard.toNumber());
+              isWin ? setShowGameWonModal(true) : setShowGameLostModal(true);
+              isWin ? setSecondGameWon(true) : setSecondGameLost(true);
             }
           }
         );
@@ -128,9 +221,8 @@ const Game = () => {
 
       setContractLoaded(true);
     }
-  }, [contract]);
+  }, [contract, address]);
 
-  const flipCard = () => {};
   return (
     <Container>
       <Navbar />
@@ -138,8 +230,14 @@ const Game = () => {
         <Left>
           <LeftCard>
             <img src={UpK} alt="left_card" />
-            <CardContainer>
-              <Button onClick={flipCard}> Click to flip</Button>
+            <CardContainer
+              style={{ border: firstCard !== 0 ? "none" : "2px dashed #000" }}
+            >
+              {firstCard ? (
+                <img src={`/cards/${getRandomCard(firstCard)}.png`} alt="" />
+              ) : (
+                <Button onClick={drawFirstCard}> Click to flip</Button>
+              )}
             </CardContainer>
             <img src={DownA} alt="left_card" />
           </LeftCard>
@@ -147,7 +245,15 @@ const Game = () => {
         </Left>
         <Middle>
           <Title>I Bet next card is</Title>
-          <CardChoice>
+          <CardChoice
+            onClick={() => {
+              setHigher(true);
+              setChoice("higher");
+            }}
+            style={{
+              backgroundColor: choice === "higher" ? "#B6F72B" : "white",
+            }}
+          >
             <ChoiceType>
               High Card
               <span>50%(2x)</span>
@@ -156,7 +262,15 @@ const Game = () => {
               <TiArrowSortedUp color="#fff" size={40} />
             </ChoiceTypeIconContainer>
           </CardChoice>
-          <CardChoice>
+          <CardChoice
+            onClick={() => {
+              setHigher(false);
+              setChoice("low");
+            }}
+            id="low"
+            choice={choice}
+            style={{ backgroundColor: choice === "low" ? "#B6F72B" : "white" }}
+          >
             <ChoiceType>
               Low Card
               <span>50%(2x)</span>
@@ -168,38 +282,63 @@ const Game = () => {
           <Title>For</Title>
 
           <TipCardContainer>
-            <TipCard>
-              0.05 <span>MATIC</span>
-            </TipCard>
-            <TipCard>
-              0.1 <span>MATIC</span>
-            </TipCard>
-            <TipCard>
-              0.25 <span>MATIC</span>
-            </TipCard>
-            <TipCard>
-              0.5 <span>MATIC</span>
-            </TipCard>
-            <TipCard>
-              1.0 <span>MATIC</span>
-            </TipCard>
-            <TipCard>
-              2.0 <span>MATIC</span>
-            </TipCard>
+            {bets.map((bet) => {
+              return (
+                <TipCard
+                  key={bet}
+                  disabled={secondCard}
+                  onClick={() => setBetAmount(bet)}
+                  style={{
+                    backgroundColor: !secondCard
+                      ? betAmount === bet
+                        ? "#B6F72B"
+                        : "white"
+                      : betAmount === bet
+                      ? "#B6F72B"
+                      : "#E1E1E1",
+                  }}
+                >
+                  {bet} <span>MATIC</span>
+                </TipCard>
+              );
+            })}
           </TipCardContainer>
-          <Button variant="primary">
+          <Button
+            variant={betAmount !== "0" ? "primary" : "disabled"}
+            onClick={secondCard ? makeSecondBet : makeFirstBet}
+            disabled={betAmount !== "0" ? false : true}
+          >
             Bet <TbArrowRight style={{ margin: "0 12px" }} size={20} />
           </Button>
         </Middle>
         <Right>
           <LeftCard>
             <img src={UpK} alt="left_card" />
-            <CardContainer>Random card from the deck</CardContainer>
+            <CardContainer
+              style={{ border: secondCard !== 0 ? "none" : "2px dashed #000" }}
+            >
+              {thirdCard ? (
+                <img src={`/cards/${getRandomCard(thirdCard)}.png`} alt="" />
+              ) : secondCard ? (
+                <img src={`/cards/${getRandomCard(secondCard)}.png`} alt="" />
+              ) : (
+                "Random card from the deck"
+              )}
+            </CardContainer>
             <img src={DownA} alt="left_card" />
           </LeftCard>
           Your Card
         </Right>
       </ContentContainer>
+      {showGameWonModal && <GameWonModal />}
+      {showGameLostModal && <GameLostModal />}
+      {showFirstGameLostModal && <FirstGameLostModal />}
+      {showFirstGameWonModal && (
+        <FirstGameWonModal
+          makeSecondBet={makeSecondBet}
+          setShowFirstGameWonModal={setShowFirstGameWonModal}
+        />
+      )}
     </Container>
   );
 };
@@ -214,6 +353,10 @@ const CardContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  object-fit: contain;
+  img {
+    width: 100%;
+  }
 `;
 const ContentContainer = styled.div`
   display: flex;
@@ -246,7 +389,7 @@ const Title = styled.div`
   color: #000000;
 `;
 
-const TipCard = styled.div`
+const TipCard = styled.button`
   cursor: pointer;
   width: 96px;
   border: 2px solid #000000;
@@ -279,7 +422,6 @@ const TipCardContainer = styled.div`
   margin-bottom: 32px;
 `;
 const CardChoice = styled.div`
-  background: #fffcf6;
   border: 2px solid #0f0f0f;
   box-shadow: 4px 4px 0px #000000;
   cursor: pointer;

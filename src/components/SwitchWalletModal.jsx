@@ -12,7 +12,7 @@ const SwitchWalletModal = ({
       <ModalContainer>
         <Warning>
           <RiErrorWarningLine size={24} style={{ margin: " 0 4px " }} />
-          You are connected to {chain.name}
+          You are connected to {chain?.name ?? chain?.id}
         </Warning>
         <ModalHeader>Switch to mumbai testnet ?</ModalHeader>
         <Subtitle>We use polygon for all the transactions</Subtitle>

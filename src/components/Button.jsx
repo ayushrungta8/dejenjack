@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-const Button = ({ children, variant, style, onClick }) => {
+const Button = ({ children, variant, style, onClick, disabled }) => {
   return (
-    <ButtonContainer style={style} variant={variant} onClick={onClick}>
+    <ButtonContainer
+      style={style}
+      variant={variant}
+      onClick={onClick}
+      disabled={disabled}
+    >
       {children}
     </ButtonContainer>
   );
@@ -27,6 +32,6 @@ const ButtonContainer = styled.button`
   font-size: 16px;
   line-height: 19px;
   color: #0f0f0f;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 `;
 export default Button;

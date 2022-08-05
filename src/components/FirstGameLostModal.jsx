@@ -1,25 +1,22 @@
 import React from "react";
+import { MdExitToApp } from "react-icons/md";
 import styled from "styled-components";
 import Button from "./Button";
-
-const GameLostModal = () => {
+import { FiRefreshCcw } from "react-icons/fi";
+const FirstGameLostModal = () => {
   return (
     <Container>
       <ModalContainer>
-        <Emoji>😵</Emoji>
-        <ModalHeader>Uh-oh! You got rugged!</ModalHeader>
-        <Subtitle>Keep going, Give it another shot!</Subtitle>
+        <Emoji>💀</Emoji>
+        <ModalHeader>LOSER!</ModalHeader>
+        <Subtitle>Uh-oh! You got rugged! Give it another shot! 😏</Subtitle>
 
         <ButtonContainer>
-          <Button
-            style={{ width: "200px" }}
-            variant="disabled"
-            onClick={() => window.location.reload()}
-          >
-            I'm leaving
+          <Button style={{ width: "200px" }} variant="disabled">
+            I'm leaving <MdExitToApp style={{ marginLeft: "8px" }} />
           </Button>
           <Button style={{ width: "200px" }} variant="secondary">
-            Degen Again
+            Degen Again <FiRefreshCcw style={{ marginLeft: "8px" }} />
           </Button>
         </ButtonContainer>
       </ModalContainer>
@@ -87,4 +84,4 @@ const ButtonContainer = styled.div`
 const Emoji = styled.div`
   font-size: 40px;
 `;
-export default GameLostModal;
+export default FirstGameLostModal;

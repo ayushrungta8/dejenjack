@@ -1,20 +1,41 @@
 import React from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import Loader from "./Loader";
 
-const GameLoadingModal = () => {
+const GameLoadingModal = ({ setGameStarted }) => {
+  const [progress, setProgress] = React.useState(0);
+  useEffect(() => {
+    const int = setInterval(() => {
+      progress < 100 && setProgress((p) => p + 1);
+    }, 5);
+    return () => clearInterval(int);
+  });
+  useEffect(() => {
+    if (progress === 100) {
+      setGameStarted(true);
+    }
+  }, [progress, setGameStarted]);
   return (
     <Container>
       <ModalContainer>
         <Loader />
-        <ModalHeader>Get ready to play !</ModalHeader>
+        {progress > 90 && <ModalHeader>Get ready to play !</ModalHeader>}
+        {progress > 50 && progress < 91 && (
+          <ModalHeader>Shuffling the deck</ModalHeader>
+        )}
+        {progress < 51 && (
+          <ModalHeader>Generating game environment</ModalHeader>
+        )}
         <Subtitle>This may take 1 minute to complete</Subtitle>
         <Divider />
         <ModalFooter>
-          <StepContainer>Step 1 of 3</StepContainer>
+          <StepContainer>
+            Step {progress > 90 ? "3" : progress > 50 ? "2" : "1"} of 3
+          </StepContainer>
           <ProgressContainer>
-            40% Done
-            <ProgressBar />
+            {progress}% Done
+            <ProgressBar progress={progress} />
           </ProgressContainer>
         </ModalFooter>
       </ModalContainer>
@@ -106,7 +127,7 @@ const ProgressBar = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    width: 40%;
+    width: ${(props) => props.progress}%;
     height: 100%;
     background: #b247e5;
     border-radius: 21.4138px;

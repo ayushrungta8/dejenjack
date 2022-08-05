@@ -1,19 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
 import landing_left_card from "../assets/images/landing_left_card.png";
 import landing_right_card from "../assets/images/landing_right_card.png";
 import Button from "../components/Button";
-import { chainId, useAccount, useConnect, useEnsName } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import SelectWalletModal from "../components/SelectWalletModal";
-// import GameLoadingModal from "../components/GameLoadingModal";
-// import GenerateCardModal from "../components/GenerateCardModal";
-// import DrawingCardModal from "../components/DrawingCardModal";
-// import ConfirmBetModal from "../components/ConfirmBetModal";
-// import GameLostModal from "../components/GameLostModal";
-// import GameWonModal from "../components/GameWonModal";
-// import TippingModal from "../components/TippingModal";
 import { useNetwork } from "wagmi";
 import { useSwitchNetwork } from "wagmi";
 import SwitchWalletModal from "../components/SwitchWalletModal";
@@ -21,31 +14,28 @@ import BeginGameModal from "../components/BeginGameModal";
 import { VscArrowRight } from "react-icons/vsc";
 import GameLoadingModal from "../components/GameLoadingModal";
 
-const Landing = () => {
-  const { address, isConnected } = useAccount();
-  const { chains, error, isLoading, pendingChainId, switchNetwork } =
-    useSwitchNetwork();
+const Landing = ({ setGameStarted }) => {
+  const [showSwitchWalletModal, setShowSwitchWalletModal] = useState(false);
+  const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
+  const [showBeginGameModal, setShowBeginGameModal] = useState(false);
+  const [showGameLoadingModal, setShowGameLoadingModal] = useState(false);
+
   const { chain } = useNetwork();
-  const [showSwitchWalletModal, setShowSwitchWalletModal] =
-    React.useState(false);
-  const [showSelectWalletModal, setShowSelectWalletModal] =
-    React.useState(false);
-  const [showBeginGameModal, setShowBeginGameModal] = React.useState(false);
+  const { switchNetwork } = useSwitchNetwork();
+
+  const { isConnected } = useAccount();
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
 
   const switchToPolygon = () => {
+    console.log(chain?.id, "cirrent chain id");
+    console.log(switchNetwork, "switch network id");
     switchNetwork?.(80001);
   };
-  // const handleWalletConnect = () => {
-  //   connect();
-  //   setShowSelectWalletModal(false);
-  //   console.log(chain.id);
-  //   chain.id !== 80001 && switchToPolygon();
-  // };
+
   useEffect(() => {
-    console.log(chain?.id);
+    console.log(chain?.id, "cirrent chain id");
     if (isConnected && chain?.id !== 80001) {
       console.log("switch to polygon");
       setShowSwitchWalletModal(true);
@@ -53,7 +43,8 @@ const Landing = () => {
     if (chain?.id === 80001) {
       setShowSwitchWalletModal(false);
     }
-  }, [chain]);
+  }, [chain, isConnected]);
+
   return (
     <Container>
       <Navbar />
@@ -67,6 +58,7 @@ const Landing = () => {
             Guessing game strong? Use it to guess the next
             <br /> card and win upto 3x your bet amount!
           </Subtitle>
+
           {isConnected && chain?.id === 80001 ? (
             <Button
               variant="primary"
@@ -103,17 +95,13 @@ const Landing = () => {
           chain={chain}
         />
       )}
-      {showBeginGameModal && <BeginGameModal />}
-      {/* <QrModal /> */}
-      {/* <ConnectingWalletModal /> */}
-      {/* <SwitchingWalletModal /> */}
-      {/* <GameLoadingModal /> */}
-      {/* <GenerateCardModal /> */}
-      {/* <DrawingCardModal /> */}
-      {/* <ConfirmBetModal /> */}
-      {/* <GameLostModal /> */}
-      {/* <GameWonModal /> */}
-      {/* <TippingModal /> */}
+      {showBeginGameModal && (
+        <BeginGameModal onClick={() => setShowGameLoadingModal(true)} />
+      )}
+
+      {showGameLoadingModal && (
+        <GameLoadingModal setGameStarted={setGameStarted} />
+      )}
     </Container>
   );
 };
