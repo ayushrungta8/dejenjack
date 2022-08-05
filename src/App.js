@@ -1,6 +1,6 @@
 // import Game from "./pages/Game";
 import Landing from "./pages/Landing";
-import { publicProvider } from "wagmi/providers/public";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 import {
   WagmiConfig,
   createClient,
@@ -11,15 +11,15 @@ import {
 import Game from "./pages/Game";
 
 function App() {
+  const alchemyId = process.env.REACT_APP_ALCHEMY_ID;
   const { chains, provider, webSocketProvider } = configureChains(
-    [chain.polygon],
-    [publicProvider()]
+    [chain.polygonMumbai],
+    [alchemyProvider({ alchemyId })]
   );
 
   const client = createClient({
     autoConnect: true,
     provider,
-
     webSocketProvider,
   });
   return (
