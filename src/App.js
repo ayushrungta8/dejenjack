@@ -9,7 +9,7 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 function App() {
   const { chains, provider, webSocketProvider } = configureChains(
     [chain.polygonMumbai],
-    [alchemyProvider({ alchemyId: "Uv3eewfH3-jgapSLxwj-5Gq2A1iDtqhD" })]
+    [alchemyProvider({ alchemyId: process.env.REACT_APP_ALCHEMY_ID })]
   );
   const [gameStarted, setGameStarted] = useState(false);
   const client = createClient({
