@@ -13,7 +13,7 @@ import SwitchWalletModal from "../components/SwitchWalletModal";
 import BeginGameModal from "../components/BeginGameModal";
 import { VscArrowRight } from "react-icons/vsc";
 import GameLoadingModal from "../components/GameLoadingModal";
-
+import { ImTwitter } from "react-icons/im";
 const Landing = ({ setGameStarted }) => {
   const [showSwitchWalletModal, setShowSwitchWalletModal] = useState(false);
   const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
@@ -102,6 +102,9 @@ const Landing = ({ setGameStarted }) => {
       {showGameLoadingModal && (
         <GameLoadingModal setGameStarted={setGameStarted} />
       )}
+      <TwitterBubble href="https://twitter.com/degen_jack" target="_blank">
+        <ImTwitter />
+      </TwitterBubble>
     </Container>
   );
 };
@@ -136,5 +139,24 @@ const Subtitle = styled.div`
   color: #0f0f0f;
   margin-top: 16px;
   margin-bottom: 64px;
+`;
+const TwitterBubble = styled.a`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #1da1f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  color: white;
+  padding: 8px;
+  svg {
+    width: 25px;
+    height: 25px;
+  }
 `;
 export default Landing;
