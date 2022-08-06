@@ -17,6 +17,9 @@ import GameLostModal from "../components/GameLostModal";
 import FirstGameLostModal from "../components/FirstGameLostModal";
 import FirstGameWonModal from "../components/FirstGameWonModal";
 import ModalLoader from "../components/ModalLoader";
+import { payoutMultiplier } from "../payoutMultiplier";
+import { winPercentage } from "../winPercentage";
+
 const Game = ({ setGameStarted }) => {
   //states
   const [firstCard, setFirstCard] = useState(0);
@@ -40,7 +43,6 @@ const Game = ({ setGameStarted }) => {
   const [ctaDisabled, setCtaDisabled] = useState(true);
   const [showLoader, setShowLoader] = useState(false);
   const [payoutAmount, setPayoutAmount] = useState(0);
-
   const bets = [0.05, 0.1, 0.25, 0.5, 1.0, 2.0];
 
   //web3 hooks
@@ -118,6 +120,7 @@ const Game = ({ setGameStarted }) => {
   const drawFirstCard = async () => {
     try {
       setShowLoader(true);
+
       await contractReader()().drawCard();
     } catch (err) {
       setShowLoader(false);
@@ -191,6 +194,7 @@ const Game = ({ setGameStarted }) => {
         contract.on("CardDrawn", (player, firstDrawCard) => {
           // console.log(player, firstDrawCard);
           // console.log("accountData", address);
+
           if (player.toLowerCase() === address?.toLowerCase()) {
             // console.log("firstDrawCard", firstDrawCard.toNumber());
             setShowLoader(false);
@@ -209,6 +213,7 @@ const Game = ({ setGameStarted }) => {
           (player, firstDrawCard, secondDrawCard, isWin) => {
             console.log("accountData", address);
             console.log(player, firstDrawCard, secondDrawCard, isWin);
+
             if (player.toLowerCase() === address?.toLowerCase()) {
               // Manage first bet made state
               console.log("firstDrawCard", firstDrawCard.toNumber());
@@ -308,7 +313,10 @@ const Game = ({ setGameStarted }) => {
           >
             <ChoiceType>
               High Card
-              <span>50%(2x)</span>
+              <span>
+                {winPercentage[firstCard]?.[1] ?? "50"}%(
+                {payoutMultiplier[firstCard]?.[1] ?? "1.5"}x)
+              </span>
             </ChoiceType>
             <ChoiceTypeIconContainer>
               <TiArrowSortedUp color="#fff" size={40} />
@@ -326,7 +334,11 @@ const Game = ({ setGameStarted }) => {
           >
             <ChoiceType>
               Low Card
-              <span>50%(2x)</span>
+              <span>
+                {" "}
+                {winPercentage[firstCard]?.[0] ?? "50"}%(
+                {payoutMultiplier[firstCard]?.[0] ?? "1.5"}x)
+              </span>
             </ChoiceType>
             <ChoiceTypeIconContainer>
               <TiArrowSortedDown color="#fff" size={40} />
