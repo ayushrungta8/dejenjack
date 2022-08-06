@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
 
-const GameLostModal = () => {
+const GameLostModal = ({ setGameStarted }) => {
   return (
     <Container>
       <ModalContainer>
@@ -18,7 +18,11 @@ const GameLostModal = () => {
           >
             I'm leaving
           </Button>
-          <Button style={{ width: "200px" }} variant="secondary">
+          <Button
+            style={{ width: "200px" }}
+            variant="secondary"
+            onClick={() => window.location.reload()}
+          >
             Degen Again
           </Button>
         </ButtonContainer>

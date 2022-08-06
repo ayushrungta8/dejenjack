@@ -2,7 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
 
-const FirstGameWonModal = ({ setShowFirstGameWonModal }) => {
+const FirstGameWonModal = ({
+  setShowFirstGameWonModal,
+  setFirstCard,
+  setSecondCard,
+  firstCard,
+  secondCard,
+}) => {
   return (
     <Container>
       <ModalContainer>
@@ -16,6 +22,8 @@ const FirstGameWonModal = ({ setShowFirstGameWonModal }) => {
             variant="secondary"
             onClick={() => {
               setShowFirstGameWonModal(false);
+              setFirstCard(secondCard);
+              setSecondCard(null);
             }}
           >
             Hit me!

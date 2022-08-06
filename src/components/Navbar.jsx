@@ -12,9 +12,15 @@ const Navbar = () => {
         <img src="/logo.png" alt="" />
       </LogoContainer>
       <LinkContainer>
-        <Link>About</Link>
+        {/* <Link>About</Link>
         <Link>FAQ's</Link>
-        <Link>Leaderboard</Link>
+        <Link>Leaderboard</Link> */}
+        <Link
+          href="https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask"
+          target="_blank"
+        >
+          Add PolygonMumbai To Metamask
+        </Link>
         <Button variant="primary">
           {isConnected ? address.substring(0, 10) + "..." : "Connect Wallet"}
         </Button>

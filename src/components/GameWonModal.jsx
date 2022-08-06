@@ -2,19 +2,29 @@ import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
 
-const GameWonModal = () => {
+const GameWonModal = ({ payoutAmount, setGameStarted }) => {
   return (
     <Container>
       <ModalContainer>
         <Emoji>🚀</Emoji>
-        <ModalHeader>Congratulations! You just won 0.5 MATIC !</ModalHeader>
+        <ModalHeader>
+          Congratulations! You just won {payoutAmount} MATIC !
+        </ModalHeader>
         <Subtitle>Keep going and create a streak!</Subtitle>
 
         <ButtonContainer>
-          <Button style={{ width: "200px" }} variant="disabled">
+          <Button
+            style={{ width: "200px" }}
+            variant="disabled"
+            onClick={() => setGameStarted(false)}
+          >
             I'm leaving
           </Button>
-          <Button style={{ width: "200px" }} variant="secondary">
+          <Button
+            style={{ width: "200px" }}
+            variant="secondary"
+            onClick={() => window.location.reload()}
+          >
             Degen Again
           </Button>
         </ButtonContainer>

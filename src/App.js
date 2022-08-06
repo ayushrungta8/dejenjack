@@ -29,7 +29,11 @@ function App() {
   return (
     <WagmiConfig client={client}>
       <div className="App">
-        {gameStarted ? <Game /> : <Landing setGameStarted={setGameStarted} />}
+        {gameStarted ? (
+          <Game setGameStarted={setGameStarted} />
+        ) : (
+          <Landing setGameStarted={setGameStarted} />
+        )}
       </div>
     </WagmiConfig>
   );

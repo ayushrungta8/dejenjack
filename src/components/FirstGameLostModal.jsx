@@ -12,10 +12,18 @@ const FirstGameLostModal = () => {
         <Subtitle>Uh-oh! You got rugged! Give it another shot! 😏</Subtitle>
 
         <ButtonContainer>
-          <Button style={{ width: "200px" }} variant="disabled">
+          <Button
+            style={{ width: "200px" }}
+            variant="disabled"
+            onClick={() => window.location.reload()}
+          >
             I'm leaving <MdExitToApp style={{ marginLeft: "8px" }} />
           </Button>
-          <Button style={{ width: "200px" }} variant="secondary">
+          <Button
+            style={{ width: "200px" }}
+            variant="secondary"
+            onClick={() => window.location.reload()}
+          >
             Degen Again <FiRefreshCcw style={{ marginLeft: "8px" }} />
           </Button>
         </ButtonContainer>

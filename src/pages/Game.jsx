@@ -16,7 +16,8 @@ import GameWonModal from "../components/GameWonModal";
 import GameLostModal from "../components/GameLostModal";
 import FirstGameLostModal from "../components/FirstGameLostModal";
 import FirstGameWonModal from "../components/FirstGameWonModal";
-const Game = () => {
+import ModalLoader from "../components/ModalLoader";
+const Game = ({ setGameStarted }) => {
   //states
   const [firstCard, setFirstCard] = useState(0);
   const [secondCard, setSecondCard] = useState(0);
@@ -34,6 +35,11 @@ const Game = () => {
   const [firstGameLost, setFirstGameLost] = useState(false);
   const [secondGameWon, setSecondGameWon] = useState(false);
   const [secondGameLost, setSecondGameLost] = useState(false);
+  const [choiceDisabled, setChoiceDisabled] = useState(true);
+  const [betDisabled, setBetDisabled] = useState(true);
+  const [ctaDisabled, setCtaDisabled] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
+  const [payoutAmount, setPayoutAmount] = useState(0);
 
   const bets = [0.05, 0.1, 0.25, 0.5, 1.0, 2.0];
 
@@ -72,8 +78,17 @@ const Game = () => {
         const tempThirdCard = activeGame.cards.thirdDraw.value.toNumber();
         tempThirdCard !== 0 && setThirdCard(tempThirdCard);
 
-        const tempBetAmount = activeGame.betAmount.toString();
-        setBetAmount(tempBetAmount);
+        const tempBetAmount = activeGame.betAmount;
+        console.log(
+          "tempBetAmount",
+          tempBetAmount.toString(),
+          typeof ethers.utils.formatEther(tempBetAmount.toString())
+        );
+        const tempBetAmountSmall = ethers.utils.formatEther(
+          tempBetAmount.toString()
+        );
+        console.log("tempBetAmountSmall", parseFloat(tempBetAmountSmall));
+        setBetAmount(parseFloat(tempBetAmountSmall));
 
         const tempFirstPrediction = activeGame.firstPrediction;
         setFirstPrediction(tempFirstPrediction);
@@ -102,25 +117,31 @@ const Game = () => {
 
   const drawFirstCard = async () => {
     try {
+      setShowLoader(true);
       await contractReader()().drawCard();
     } catch (err) {
+      setShowLoader(false);
       console.log(err);
     }
   };
   const makeFirstBet = async () => {
     try {
+      setShowLoader(true);
       await contractReader()().makeFirstBet(higher, {
         value: ethers.utils.parseEther(betAmount.toString()),
       });
     } catch (err) {
+      setShowLoader(false);
       console.log(err);
     }
   };
   const makeSecondBet = async () => {
     try {
+      setShowLoader(true);
       setShowFirstGameWonModal(false);
       await contractReader()().makeSecondBet(higher);
     } catch (err) {
+      setShowLoader(false);
       console.log(err);
     }
   };
@@ -135,6 +156,21 @@ const Game = () => {
       firstPrediction,
       secondPrediction
     );
+    if (firstCard !== 0) {
+      if (firstGameWon) {
+        setChoiceDisabled(false);
+        setBetDisabled(true);
+      } else {
+        setChoiceDisabled(false);
+        setBetDisabled(false);
+      }
+    }
+    if (choice && betAmount.toString() !== "0") {
+      console.log("choice", choice);
+      console.log("betAmount", betAmount);
+      setCtaDisabled(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     firstCard,
     secondCard,
@@ -143,8 +179,12 @@ const Game = () => {
     higher,
     firstPrediction,
     secondPrediction,
+    choice,
+    // firstGameWon,
   ]);
-
+  // useEffect(() => {
+  //   !betDisabled && !choiceDisabled && setCtaDisabled(false);
+  // });
   useEffect(() => {
     if (contract && !contractLoadedRef.current) {
       try {
@@ -153,7 +193,10 @@ const Game = () => {
           // console.log("accountData", address);
           if (player.toLowerCase() === address?.toLowerCase()) {
             // console.log("firstDrawCard", firstDrawCard.toNumber());
+            setShowLoader(false);
             setFirstCard(firstDrawCard.toNumber());
+            setBetDisabled(false);
+            setChoiceDisabled(false);
           }
         });
       } catch (error) {
@@ -170,12 +213,15 @@ const Game = () => {
               // Manage first bet made state
               console.log("firstDrawCard", firstDrawCard.toNumber());
               console.log("secondDrawCard", secondDrawCard.toNumber());
+              setShowLoader(false);
+
               setFirstCard(firstDrawCard.toNumber());
               setSecondCard(secondDrawCard.toNumber());
               isWin
                 ? setShowFirstGameWonModal(true)
                 : setShowFirstGameLostModal(true);
               isWin ? setFirstGameWon(true) : setFirstGameLost(true);
+              setBetDisabled(true);
             }
           }
         );
@@ -211,8 +257,12 @@ const Game = () => {
               console.log("th", thirdDrawCard.toNumber());
               setFirstCard(secondDrawCard.toNumber());
               setSecondCard(thirdDrawCard.toNumber());
+              setPayoutAmount(
+                ethers.utils.formatEther(payoutAmount.toString())
+              );
               isWin ? setShowGameWonModal(true) : setShowGameLostModal(true);
               isWin ? setSecondGameWon(true) : setSecondGameLost(true);
+              setShowLoader(false);
             }
           }
         );
@@ -254,6 +304,7 @@ const Game = () => {
             style={{
               backgroundColor: choice === "higher" ? "#B6F72B" : "white",
             }}
+            disabled={choiceDisabled}
           >
             <ChoiceType>
               High Card
@@ -269,6 +320,7 @@ const Game = () => {
               setChoice("low");
             }}
             id="low"
+            disabled={choiceDisabled}
             choice={choice}
             style={{ backgroundColor: choice === "low" ? "#B6F72B" : "white" }}
           >
@@ -287,7 +339,7 @@ const Game = () => {
               return (
                 <TipCard
                   key={bet}
-                  disabled={secondCard}
+                  disabled={betDisabled}
                   onClick={() => setBetAmount(bet)}
                   style={{
                     backgroundColor: !secondCard
@@ -306,8 +358,8 @@ const Game = () => {
           </TipCardContainer>
           <Button
             variant={betAmount !== "0" ? "primary" : "disabled"}
-            onClick={secondCard ? makeSecondBet : makeFirstBet}
-            disabled={betAmount !== "0" ? false : true}
+            onClick={firstGameWon ? makeSecondBet : makeFirstBet}
+            disabled={ctaDisabled}
           >
             Bet <TbArrowRight style={{ margin: "0 12px" }} size={20} />
           </Button>
@@ -316,7 +368,7 @@ const Game = () => {
           <LeftCard>
             <img src={UpK} alt="left_card" />
             <CardContainer
-              style={{ border: secondCard !== 0 ? "none" : "2px dashed #000" }}
+              style={{ border: secondCard ? "none" : "2px dashed #000" }}
             >
               {thirdCard ? (
                 <img src={`/cards/${getRandomCard(thirdCard)}.png`} alt="" />
@@ -331,14 +383,27 @@ const Game = () => {
           Your Card
         </Right>
       </ContentContainer>
-      {showGameWonModal && <GameWonModal />}
-      {showGameLostModal && <GameLostModal />}
-      {showFirstGameLostModal && <FirstGameLostModal />}
+      {showGameWonModal && (
+        <GameWonModal
+          payoutAmount={payoutAmount}
+          setGameStarted={setGameStarted}
+        />
+      )}
+      {showGameLostModal && <GameLostModal setGameStarted={setGameStarted} />}
+      {showFirstGameLostModal && (
+        <FirstGameLostModal setGameStarted={setGameStarted} />
+      )}
       {showFirstGameWonModal && (
         <FirstGameWonModal
           setShowFirstGameWonModal={setShowFirstGameWonModal}
+          setFirstCard={setFirstCard}
+          setSecondCard={setSecondCard}
+          firstCard={firstCard}
+          secondCard={secondCard}
+          setGameStarted={setGameStarted}
         />
       )}
+      {showLoader && <ModalLoader />}
     </Container>
   );
 };
@@ -390,7 +455,7 @@ const Title = styled.div`
 `;
 
 const TipCard = styled.button`
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   width: 96px;
   border: 2px solid #000000;
   box-shadow: 4px 4px 0px #000000;
@@ -421,10 +486,10 @@ const TipCardContainer = styled.div`
   grid-gap: 16px;
   margin-bottom: 32px;
 `;
-const CardChoice = styled.div`
+const CardChoice = styled.button`
   border: 2px solid #0f0f0f;
   box-shadow: 4px 4px 0px #000000;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   display: flex;
   justify-content: space-between;
   align-items: center;
