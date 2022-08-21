@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/Navbar";
-import landing_left_card from "../assets/images/landing_left_card.png";
-import landing_right_card from "../assets/images/landing_right_card.png";
+
 import Button from "../components/Button";
-import { useAccount, useConnect, useContract } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import SelectWalletModal from "../components/SelectWalletModal";
+import { useAccount, useContract } from "wagmi";
+
 import { useNetwork } from "wagmi";
 import { useSwitchNetwork } from "wagmi";
 import SwitchWalletModal from "../components/SwitchWalletModal";
-import BeginGameModal from "../components/BeginGameModal";
-import { VscArrowRight } from "react-icons/vsc";
-import GameLoadingModal from "../components/GameLoadingModal";
 import { ImTwitter } from "react-icons/im";
 import useApnaNftContract from "../hooks/useNftContract";
 import { ethers } from "ethers";
-import { nftContract } from "./contracts";
 import { HILOW_NFT_ADDRESS } from "../constants";
 import nftContractABI from "../abi/HilowNFT.json";
 import MintingNftModal from "../components/MintingNftModal";
@@ -25,20 +19,19 @@ import ConfirmMintModal from "../components/ConfirmMintModal";
 
 const NFT = ({ setGameStarted }) => {
   const [showSwitchWalletModal, setShowSwitchWalletModal] = useState(false);
-  const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
   const [showConfirmMintModal, setShowConfirmMintModal] = useState(false);
   const [showMintingNftModal, setShowMintingNftModal] = useState(false);
   const [showMintingSuccessfulModal, setShowMintingSuccessfulModal] =
     useState(false);
   const [mintedTokenId, setMintedTokenId] = useState(null);
-  const [nftCount, setNftCount] = useState(1);
+  // const [nftCount, setNftCount] = useState(1);
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
 
   const { isConnected } = useAccount();
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
+  // const { connect } = useConnect({
+  //   connector: new InjectedConnector(),
+  // });
   const contractReader = useApnaNftContract();
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -48,7 +41,7 @@ const NFT = ({ setGameStarted }) => {
     contractInterface: nftContractABI.abi,
     signerOrProvider: signer,
   };
-  const { address } = useAccount();
+  // const { address } = useAccount();
 
   const contract = useContract(contractConfig);
   const switchToPolygon = () => {
@@ -135,9 +128,7 @@ const NFT = ({ setGameStarted }) => {
               margin: "12px 0",
             }}
             variant="disabled"
-            onClick={() => {
-              setShowSelectWalletModal(true);
-            }}
+            onClick={() => {}}
           >
             Opensea Collection
           </Button>
@@ -156,6 +147,13 @@ const NFT = ({ setGameStarted }) => {
           tokenId={mintedTokenId}
           contractAddress={HILOW_NFT_ADDRESS}
           setShowMintingSuccessfulModal={setShowMintingSuccessfulModal}
+        />
+      )}
+      {showSwitchWalletModal && (
+        <SwitchWalletModal
+          setShowSwitchWalletModal={setShowSwitchWalletModal}
+          switchToPolygon={switchToPolygon}
+          chain={chain}
         />
       )}
       {/* <MintingSuccessfulModal
@@ -185,7 +183,7 @@ const Middle = styled.div`
   align-items: center;
   text-align: center;
 `;
-const Right = styled.div``;
+// const Right = styled.div``;
 const Title = styled.div`
   font-weight: 500;
   font-size: 30px;
@@ -225,33 +223,33 @@ const TwitterBubble = styled.a`
     height: 25px;
   }
 `;
-const IncrementButton = styled.button`
-  width: 64px;
-  height: 64px;
-  background-color: transparent;
-  border: ${(props) => (props.disabled ? "1px solid #ccc" : "3px solid black")};
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
-  font-size: 32px;
-`;
-const Quantity = styled.div`
-  background-color: transparent;
-  border: 3px solid black;
-  padding: 8px 32px;
-  width: 96px;
-  font-size: 32px;
-  margin: 0 32px;
-`;
-const QuantityContainer = styled.div`
-  display: flex;
-  margin-top: 32px;
-  margin-bottom: 8px;
-`;
-const GreyText = styled.div`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: center;
-  color: #545454;
-  margin-bottom: 16px;
-`;
+// const IncrementButton = styled.button`
+//   width: 64px;
+//   height: 64px;
+//   background-color: transparent;
+//   border: ${(props) => (props.disabled ? "1px solid #ccc" : "3px solid black")};
+//   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+//   font-size: 32px;
+// `;
+// const Quantity = styled.div`
+//   background-color: transparent;
+//   border: 3px solid black;
+//   padding: 8px 32px;
+//   width: 96px;
+//   font-size: 32px;
+//   margin: 0 32px;
+// `;
+// const QuantityContainer = styled.div`
+//   display: flex;
+//   margin-top: 32px;
+//   margin-bottom: 8px;
+// `;
+// const GreyText = styled.div`
+//   font-weight: 400;
+//   font-size: 16px;
+//   line-height: 19px;
+//   text-align: center;
+//   color: #545454;
+//   margin-bottom: 16px;
+// `;
 export default NFT;

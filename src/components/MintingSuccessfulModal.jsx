@@ -86,18 +86,18 @@ const ModalHeader = styled.div`
   margin: 20px;
 `;
 
-const Subtitle = styled.div`
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 34px;
-  color: #545454;
-  text-align: center;
-  letter-spacing: -0.04em;
-  /* margin: 12px 0; */
-  span {
-    color: #000;
-  }
-`;
+// const Subtitle = styled.div`
+//   font-weight: 400;
+//   font-size: 18px;
+//   line-height: 34px;
+//   color: #545454;
+//   text-align: center;
+//   letter-spacing: -0.04em;
+//   /* margin: 12px 0; */
+//   span {
+//     color: #000;
+//   }
+// `;
 
 const ButtonContainer = styled.div`
   width: 100%;
