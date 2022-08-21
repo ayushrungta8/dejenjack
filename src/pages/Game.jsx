@@ -354,7 +354,7 @@ const Game = ({ setGameStarted }) => {
                   disabled={betDisabled}
                   onClick={() => setBetAmount(bet)}
                   style={{
-                    backgroundColor: !secondCard
+                    backgroundColor: !betDisabled
                       ? betAmount === bet
                         ? "#B6F72B"
                         : "white"

@@ -1,1 +1,2 @@
 export const HILOW_ADDRESS = "0xbfad3142eda12170a491eea60f8af543aafb602c";
+export const HILOW_NFT_ADDRESS = "0x4bF66316594118F31DfAd4587fca08A30f09BE9d";

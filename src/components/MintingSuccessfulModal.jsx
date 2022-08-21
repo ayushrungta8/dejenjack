@@ -1,31 +1,48 @@
 import React from "react";
 import styled from "styled-components";
 import Button from "./Button";
-
-const GameWonModal = ({ payoutAmount, setGameStarted }) => {
+import { BsTwitter } from "react-icons/bs";
+import { IoIosClose } from "react-icons/io";
+const MintingSuccessfulModal = ({
+  tokenId,
+  contractAddress,
+  setShowMintingSuccessfulModal,
+}) => {
   return (
     <Container>
       <ModalContainer>
+        <div style={{ width: "100%" }}>
+          <IoIosClose
+            size={30}
+            onClick={() => setShowMintingSuccessfulModal(false)}
+            style={{
+              cursor: "pointer",
+            }}
+          />
+        </div>
         <Emoji>🚀</Emoji>
-        <ModalHeader>
-          Congratulations! You just won {payoutAmount} MATIC !
-        </ModalHeader>
-        <Subtitle>Keep going and create a streak!</Subtitle>
+        <ModalHeader>Your mint was successful !</ModalHeader>
 
         <ButtonContainer>
           <Button
-            style={{ width: "200px" }}
+            style={{ width: "250px" }}
             variant="disabled"
-            onClick={() => setGameStarted(false)}
-          >
-            I'm leaving
-          </Button>
-          <Button
-            style={{ width: "200px" }}
-            variant="secondary"
             onClick={() => window.location.reload()}
           >
-            Degen Again
+            Tweet mint <BsTwitter style={{ marginLeft: "8px" }} />
+          </Button>
+          <Button
+            style={{ width: "250px" }}
+            variant="secondary"
+            onClick={() =>
+              tokenId !== null &&
+              window.open(
+                `https://mumbai.polygonscan.com/token/${contractAddress}?a=${tokenId}`,
+                "_blank"
+              )
+            }
+          >
+            View on PolygonScan
           </Button>
         </ButtonContainer>
         {/* <Link>I'd like to tip DegenJack</Link> */}
@@ -46,8 +63,8 @@ const Container = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  width: 620px;
-  height: 395px;
+  min-width: 620px;
+  /* height: 395px; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,14 +111,14 @@ const ButtonContainer = styled.div`
 const Emoji = styled.div`
   font-size: 40px;
 `;
-const Link = styled.a`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: #545454;
-  text-align: center;
-  letter-spacing: -0.04em;
-  margin: 16px 0;
-  text-decoration: underline;
-`;
-export default GameWonModal;
+// const Link = styled.a`
+//   font-weight: 400;
+//   font-size: 16px;
+//   line-height: 19px;
+//   color: #545454;
+//   text-align: center;
+//   letter-spacing: -0.04em;
+//   margin: 16px 0;
+//   text-decoration: underline;
+// `;
+export default MintingSuccessfulModal;

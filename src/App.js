@@ -5,7 +5,8 @@ import { WagmiConfig, createClient, configureChains, chain } from "wagmi";
 import Game from "./pages/Game";
 import { useState } from "react";
 import { InjectedConnector } from "wagmi/connectors/injected";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NFT from "./pages/NFT";
 function App() {
   const { chains, provider, webSocketProvider } = configureChains(
     [chain.polygonMumbai],
@@ -28,13 +29,23 @@ function App() {
   });
   return (
     <WagmiConfig client={client}>
-      <div className="App">
-        {gameStarted ? (
-          <Game setGameStarted={setGameStarted} />
-        ) : (
-          <Landing setGameStarted={setGameStarted} />
-        )}
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="App">
+                {gameStarted ? (
+                  <Game setGameStarted={setGameStarted} />
+                ) : (
+                  <Landing setGameStarted={setGameStarted} />
+                )}
+              </div>
+            }
+          />
+          <Route path="/nft" element={<NFT />} />
+        </Routes>
+      </BrowserRouter>
     </WagmiConfig>
   );
 }
