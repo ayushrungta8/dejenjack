@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Navbar from "../components/Navbar";
 
 import Button from "../components/Button";
-import { useAccount, useContract } from "wagmi";
+import { useAccount, useConnect, useContract } from "wagmi";
 
 import { useNetwork } from "wagmi";
 import { useSwitchNetwork } from "wagmi";
@@ -16,8 +16,11 @@ import nftContractABI from "../abi/HilowNFT.json";
 import MintingNftModal from "../components/MintingNftModal";
 import MintingSuccessfulModal from "../components/MintingSuccessfulModal";
 import ConfirmMintModal from "../components/ConfirmMintModal";
+import SelectWalletModal from "../components/SelectWalletModal";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 const NFT = ({ setGameStarted }) => {
+  const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
   const [showSwitchWalletModal, setShowSwitchWalletModal] = useState(false);
   const [showConfirmMintModal, setShowConfirmMintModal] = useState(false);
   const [showMintingNftModal, setShowMintingNftModal] = useState(false);
@@ -33,8 +36,9 @@ const NFT = ({ setGameStarted }) => {
   //   connector: new InjectedConnector(),
   // });
   const contractReader = useApnaNftContract();
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  const provider =
+    window.ethereum && new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider?.getSigner();
 
   const contractConfig = {
     addressOrName: HILOW_NFT_ADDRESS,
@@ -53,7 +57,7 @@ const NFT = ({ setGameStarted }) => {
     try {
       // setShowLoader(true);
       await contractReader()().mint({
-        value: ethers.utils.parseEther("0.001"),
+        value: ethers.utils.parseEther("1"),
       });
     } catch (err) {
       // setShowLoader(false);
@@ -70,21 +74,25 @@ const NFT = ({ setGameStarted }) => {
       setShowSwitchWalletModal(false);
     }
   }, [chain, isConnected]);
-
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
   useEffect(() => {
-    contract.on("NFTMinted", (owner, tokenId) => {
-      console.log(owner, tokenId);
-      setMintedTokenId(tokenId.toNumber());
-      setShowMintingNftModal(false);
-      setShowMintingSuccessfulModal(true);
-    });
+    window.ethereum &&
+      contract.on("NFTMinted", (owner, tokenId) => {
+        console.log(owner, tokenId);
+        setMintedTokenId(tokenId.toNumber());
+        setShowMintingNftModal(false);
+        setShowMintingSuccessfulModal(true);
+      });
   });
   return (
     <Container>
-      <Navbar />
+      <Navbar setShowSelectWalletModal={setShowSelectWalletModal} />
       <ContentContainer>
         <Left>
-          <img src="nft.svg" alt="left_card" />
+          {/* <img src="nft.svg" alt="left_card" /> */}
+          <video src="nftGif.mp4" autoPlay loop muted width={"400px"} />
         </Left>
         <Middle>
           <Title>DEGENJACK NFT</Title>
@@ -93,7 +101,7 @@ const NFT = ({ setGameStarted }) => {
           </Subtitle>
           <Subtitle>
             NFT Supply : <span>676</span> | Max Mint : <span>3</span> | Mint
-            Price : <span>@10 MATIC</span>
+            Price : <span>@1 MATIC</span>
           </Subtitle>
           {/* <QuantityContainer>
             <IncrementButton
@@ -111,8 +119,18 @@ const NFT = ({ setGameStarted }) => {
             </IncrementButton>
           </QuantityContainer>
           <GreyText>≈ 20.023 MATIC</GreyText> */}
-
           <Button
+            style={{ width: "300px" }}
+            variant="primary"
+            onClick={
+              !isConnected
+                ? () => setShowSelectWalletModal(true)
+                : () => setShowConfirmMintModal(true)
+            }
+          >
+            {isConnected ? "Mint Now" : "Connect Wallet"}
+          </Button>
+          {/* <Button
             style={{ width: "300px" }}
             variant="primary"
             onClick={() => {
@@ -120,7 +138,7 @@ const NFT = ({ setGameStarted }) => {
             }}
           >
             Mint Now
-          </Button>
+          </Button> */}
           <Button
             style={{
               width: "300px",
@@ -148,6 +166,16 @@ const NFT = ({ setGameStarted }) => {
           contractAddress={HILOW_NFT_ADDRESS}
           setShowMintingSuccessfulModal={setShowMintingSuccessfulModal}
         />
+      )}
+      {showSwitchWalletModal && (
+        <SwitchWalletModal
+          setShowSwitchWalletModal={setShowSwitchWalletModal}
+          switchToPolygon={switchToPolygon}
+          chain={chain}
+        />
+      )}
+      {!isConnected && showSelectWalletModal && (
+        <SelectWalletModal connect={connect} />
       )}
       {showSwitchWalletModal && (
         <SwitchWalletModal

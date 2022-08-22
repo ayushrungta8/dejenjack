@@ -22,7 +22,7 @@ const ConfirmMintModal = ({
         </Subtitle>
         <TransactionContainer>
           <Transaction>Minting Fee (Price of NFTs)</Transaction>
-          <Amount>2 MATIC</Amount>
+          <Amount>1 MATIC</Amount>
         </TransactionContainer>
         <TransactionContainer>
           <Transaction>Transaction fee (Gas fee)</Transaction>
