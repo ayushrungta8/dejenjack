@@ -57,7 +57,7 @@ const NFT = ({ setGameStarted }) => {
     try {
       // setShowLoader(true);
       await contractReader()().mint({
-        value: ethers.utils.parseEther("0.001"),
+        value: ethers.utils.parseEther("1"),
       });
     } catch (err) {
       // setShowLoader(false);
@@ -100,7 +100,7 @@ const NFT = ({ setGameStarted }) => {
           </Subtitle>
           <Subtitle>
             NFT Supply : <span>676</span> | Max Mint : <span>3</span> | Mint
-            Price : <span>@10 MATIC</span>
+            Price : <span>@1 MATIC</span>
           </Subtitle>
           {/* <QuantityContainer>
             <IncrementButton
