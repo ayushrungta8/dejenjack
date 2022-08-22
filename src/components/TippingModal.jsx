@@ -25,7 +25,7 @@ const TippingModal = () => {
         </TipCardContainer>
         <ButtonContainer>
           <Button style={{ width: "200px" }} variant="secondary">
-            Tip Dejenjack
+            Tip Degenjack
           </Button>
         </ButtonContainer>
         {/* <Link>I'd like to tip DegenJack</Link> */}
