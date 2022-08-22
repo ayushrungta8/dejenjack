@@ -33,8 +33,9 @@ const NFT = ({ setGameStarted }) => {
   //   connector: new InjectedConnector(),
   // });
   const contractReader = useApnaNftContract();
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  const provider =
+    window.ethereum && new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider?.getSigner();
 
   const contractConfig = {
     addressOrName: HILOW_NFT_ADDRESS,
@@ -72,12 +73,13 @@ const NFT = ({ setGameStarted }) => {
   }, [chain, isConnected]);
 
   useEffect(() => {
-    contract.on("NFTMinted", (owner, tokenId) => {
-      console.log(owner, tokenId);
-      setMintedTokenId(tokenId.toNumber());
-      setShowMintingNftModal(false);
-      setShowMintingSuccessfulModal(true);
-    });
+    window.ethereum &&
+      contract.on("NFTMinted", (owner, tokenId) => {
+        console.log(owner, tokenId);
+        setMintedTokenId(tokenId.toNumber());
+        setShowMintingNftModal(false);
+        setShowMintingSuccessfulModal(true);
+      });
   });
   return (
     <Container>
