@@ -91,7 +91,8 @@ const NFT = ({ setGameStarted }) => {
       <Navbar setShowSelectWalletModal={setShowSelectWalletModal} />
       <ContentContainer>
         <Left>
-          <img src="nft.svg" alt="left_card" />
+          {/* <img src="nft.svg" alt="left_card" /> */}
+          <video src="nftGif.mp4" autoPlay loop muted width={"400px"} />
         </Left>
         <Middle>
           <Title>DEGENJACK NFT</Title>
