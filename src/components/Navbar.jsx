@@ -22,8 +22,8 @@ const Navbar = ({ setShowSelectWalletModal }) => {
           Add PolygonMumbai To Metamask
         </MyLink>
         <Button
-          variant="primary"
-          style={{ marginRight: "12px" }}
+          variant="disabled"
+          style={{ marginRight: "12px", border: "2px solid black" }}
           onClick={() => window?.open("https://degenjack.xyz/#/nft", "_blank")}
         >
           Get NFT
