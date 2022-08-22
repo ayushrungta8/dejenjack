@@ -24,7 +24,7 @@ const Navbar = ({ setShowSelectWalletModal }) => {
         <Button
           variant="primary"
           style={{ marginRight: "12px" }}
-          onClick={() => window?.open("https://degenjack.xyz/nft", "_blank")}
+          onClick={() => window?.open("https://degenjack.xyz/#/nft", "_blank")}
         >
           Get NFT
         </Button>
