@@ -5,7 +5,7 @@ import { WagmiConfig, createClient, configureChains, chain } from "wagmi";
 import Game from "./pages/Game";
 import { useState } from "react";
 import { InjectedConnector } from "wagmi/connectors/injected";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import NFT from "./pages/NFT";
 function App() {
   const { chains, provider, webSocketProvider } = configureChains(
@@ -29,7 +29,9 @@ function App() {
   });
   return (
     <WagmiConfig client={client}>
-      <BrowserRouter>
+      <HashRouter>
+        {/* <BrowserRouter> */}
+
         <Routes>
           <Route
             path="/"
@@ -45,7 +47,8 @@ function App() {
           />
           <Route path="/nft" element={<NFT />} />
         </Routes>
-      </BrowserRouter>
+        {/* </BrowserRouter> */}
+      </HashRouter>
     </WagmiConfig>
   );
 }
