@@ -14,11 +14,13 @@ import BeginGameModal from "../components/BeginGameModal";
 import { VscArrowRight } from "react-icons/vsc";
 import GameLoadingModal from "../components/GameLoadingModal";
 import { ImTwitter } from "react-icons/im";
+import GambleWarningModal from "../components/GambleWarningModal";
 const Landing = ({ setGameStarted }) => {
   const [showSwitchWalletModal, setShowSwitchWalletModal] = useState(false);
   const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
   const [showBeginGameModal, setShowBeginGameModal] = useState(false);
   const [showGameLoadingModal, setShowGameLoadingModal] = useState(false);
+  const [showGambleWarningModal, setShowGambleWarningModal] = useState(false);
 
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
@@ -63,7 +65,7 @@ const Landing = ({ setGameStarted }) => {
             <Button
               variant="primary"
               onClick={() => {
-                setShowBeginGameModal(true);
+                setShowGambleWarningModal(true);
               }}
             >
               Let's Begin
@@ -93,6 +95,12 @@ const Landing = ({ setGameStarted }) => {
           setShowSwitchWalletModal={setShowSwitchWalletModal}
           switchToPolygon={switchToPolygon}
           chain={chain}
+        />
+      )}
+      {showGambleWarningModal && (
+        <GambleWarningModal
+          setShowBeginGameModal={setShowBeginGameModal}
+          setShowGambleWarningModal={setShowGambleWarningModal}
         />
       )}
       {showBeginGameModal && (

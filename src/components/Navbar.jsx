@@ -2,25 +2,32 @@ import React from "react";
 import styled from "styled-components";
 import { useAccount } from "wagmi";
 import Button from "./Button";
-
+import { Link } from "react-router-dom";
 const Navbar = ({ setShowSelectWalletModal }) => {
   const { address, isConnected } = useAccount();
 
   return (
     <Container>
-      <LogoContainer>
+      <LogoContainer to="/">
         <img src="/logo.png" alt="" />
       </LogoContainer>
       <LinkContainer>
         {/* <Link>About</Link>
         <Link>FAQ's</Link>
         <Link>Leaderboard</Link> */}
-        <Link
+        <MyLink
           href="https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask"
           target="_blank"
         >
           Add PolygonMumbai To Metamask
-        </Link>
+        </MyLink>
+        <Button
+          variant="primary"
+          style={{ marginRight: "12px" }}
+          onClick={() => window?.open("https://degenjack.xyz/nft", "_blank")}
+        >
+          Get NFT
+        </Button>
         <Button
           variant="primary"
           onClick={
@@ -43,12 +50,12 @@ const Container = styled.div`
   padding: 36px 72px;
   /* background-color: #170d0d; */
 `;
-const LogoContainer = styled.div``;
+const LogoContainer = styled(Link)``;
 const LinkContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-const Link = styled.a`
+const MyLink = styled.a`
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
