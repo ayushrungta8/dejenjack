@@ -47,7 +47,7 @@ const Landing = ({ setGameStarted }) => {
 
   return (
     <Container>
-      <Navbar />
+      <Navbar setShowSelectWalletModal={setShowSelectWalletModal} />
       <ContentContainer>
         <Left>
           <img src={landing_left_card} alt="left_card" />

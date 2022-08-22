@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useAccount } from "wagmi";
 import Button from "./Button";
 
-const Navbar = () => {
+const Navbar = ({ setShowSelectWalletModal }) => {
   const { address, isConnected } = useAccount();
 
   return (
@@ -21,7 +21,12 @@ const Navbar = () => {
         >
           Add PolygonMumbai To Metamask
         </Link>
-        <Button variant="primary">
+        <Button
+          variant="primary"
+          onClick={
+            !isConnected ? () => setShowSelectWalletModal(true) : () => {}
+          }
+        >
           {isConnected ? address.substring(0, 10) + "..." : "Connect Wallet"}
         </Button>
       </LinkContainer>

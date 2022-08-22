@@ -3,7 +3,7 @@ import styled from "styled-components";
 import metamask_icon from "../assets/images/metamask_icon.png";
 
 import { MdOutlineArrowForwardIos } from "react-icons/md";
-import { AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineEye } from "react-icons/ai";
 import { VscLock } from "react-icons/vsc";
 const SelectWalletModal = ({ connect }) => {
   return (
@@ -40,12 +40,12 @@ const SelectWalletModal = ({ connect }) => {
             </IconContainer>
             Audited Smart contract
           </FooterCard>
-          <FooterCard>
+          {/* <FooterCard>
             <IconContainer>
               <AiOutlineHeart size={24} />
             </IconContainer>
             Trusted by 2000 customers
-          </FooterCard>
+          </FooterCard> */}
         </ModalFooter>
       </ModalContainer>
     </Container>

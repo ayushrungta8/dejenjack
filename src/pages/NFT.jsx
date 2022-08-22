@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Navbar from "../components/Navbar";
 
 import Button from "../components/Button";
-import { useAccount, useContract } from "wagmi";
+import { useAccount, useConnect, useContract } from "wagmi";
 
 import { useNetwork } from "wagmi";
 import { useSwitchNetwork } from "wagmi";
@@ -16,8 +16,11 @@ import nftContractABI from "../abi/HilowNFT.json";
 import MintingNftModal from "../components/MintingNftModal";
 import MintingSuccessfulModal from "../components/MintingSuccessfulModal";
 import ConfirmMintModal from "../components/ConfirmMintModal";
+import SelectWalletModal from "../components/SelectWalletModal";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 const NFT = ({ setGameStarted }) => {
+  const [showSelectWalletModal, setShowSelectWalletModal] = useState(false);
   const [showSwitchWalletModal, setShowSwitchWalletModal] = useState(false);
   const [showConfirmMintModal, setShowConfirmMintModal] = useState(false);
   const [showMintingNftModal, setShowMintingNftModal] = useState(false);
@@ -71,7 +74,9 @@ const NFT = ({ setGameStarted }) => {
       setShowSwitchWalletModal(false);
     }
   }, [chain, isConnected]);
-
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
   useEffect(() => {
     window.ethereum &&
       contract.on("NFTMinted", (owner, tokenId) => {
@@ -83,7 +88,7 @@ const NFT = ({ setGameStarted }) => {
   });
   return (
     <Container>
-      <Navbar />
+      <Navbar setShowSelectWalletModal={setShowSelectWalletModal} />
       <ContentContainer>
         <Left>
           <img src="nft.svg" alt="left_card" />
@@ -113,8 +118,18 @@ const NFT = ({ setGameStarted }) => {
             </IncrementButton>
           </QuantityContainer>
           <GreyText>≈ 20.023 MATIC</GreyText> */}
-
           <Button
+            style={{ width: "300px" }}
+            variant="primary"
+            onClick={
+              !isConnected
+                ? () => setShowSelectWalletModal(true)
+                : () => setShowConfirmMintModal(true)
+            }
+          >
+            {isConnected ? "Mint Now" : "Connect Wallet"}
+          </Button>
+          {/* <Button
             style={{ width: "300px" }}
             variant="primary"
             onClick={() => {
@@ -122,7 +137,7 @@ const NFT = ({ setGameStarted }) => {
             }}
           >
             Mint Now
-          </Button>
+          </Button> */}
           <Button
             style={{
               width: "300px",
@@ -150,6 +165,16 @@ const NFT = ({ setGameStarted }) => {
           contractAddress={HILOW_NFT_ADDRESS}
           setShowMintingSuccessfulModal={setShowMintingSuccessfulModal}
         />
+      )}
+      {showSwitchWalletModal && (
+        <SwitchWalletModal
+          setShowSwitchWalletModal={setShowSwitchWalletModal}
+          switchToPolygon={switchToPolygon}
+          chain={chain}
+        />
+      )}
+      {!isConnected && showSelectWalletModal && (
+        <SelectWalletModal connect={connect} />
       )}
       {showSwitchWalletModal && (
         <SwitchWalletModal
