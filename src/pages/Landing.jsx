@@ -55,10 +55,10 @@ const Landing = ({ setGameStarted }) => {
           <img src={landing_left_card} alt="left_card" />
         </Left>
         <Middle>
-          <Title>4x your $MATIC within a minute</Title>
+          <Title>3x your $MATIC within a minute</Title>
           <Subtitle>
             Guessing game strong? Use it to guess the next
-            <br /> card and win upto 4x your bet amount!
+            <br /> card and win upto 3x your bet amount!
           </Subtitle>
 
           {isConnected && chain?.id === 80001 ? (
