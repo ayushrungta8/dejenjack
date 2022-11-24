@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Navbar from "../components/Navbar";
+import Navbar, { addMumbai } from "../components/Navbar";
 import landing_left_card from "../assets/images/landing_left_card.png";
 import landing_right_card from "../assets/images/landing_right_card.png";
 import Button from "../components/Button";
@@ -30,11 +30,15 @@ const Landing = ({ setGameStarted }) => {
     connector: new InjectedConnector(),
   });
 
-  const switchToPolygon = () => {
+  const switchToPolygon = async () => {
     console.log(chain?.id, "current chain id");
     console.log(switchNetwork, "switch network id");
+    addMumbai();
     switchNetwork?.(80001);
-    setShowSwitchWalletModal(false);
+
+    setTimeout(() => {
+      setShowSwitchWalletModal(false);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -72,6 +76,15 @@ const Landing = ({ setGameStarted }) => {
             >
               Let's Begin
               <VscArrowRight style={{ marginLeft: "8px" }} />
+            </Button>
+          ) : isConnected ? (
+            <Button
+              variant="primary"
+              onClick={() => {
+                setShowSwitchWalletModal(true);
+              }}
+            >
+              Switch to mumbai
             </Button>
           ) : (
             <Button

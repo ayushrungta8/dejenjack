@@ -4,27 +4,27 @@ import { useAccount } from "wagmi";
 import Button from "./Button";
 import { Link } from "react-router-dom";
 import { BsArrowUpRightSquare } from "react-icons/bs";
+export const addMumbai = () => {
+  let params = [
+    {
+      chainId: "0x13881",
+      chainName: "Mumbai",
+      nativeCurrency: {
+        name: "MATIC",
+        symbol: "MATIC",
+        decimals: 18,
+      },
+      rpcUrls: ["https://matic-mumbai.chainstacklabs.com"],
+      blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+    },
+  ];
+  window.ethereum
+    .request({ method: "wallet_addEthereumChain", params })
+    .then(() => console.log("Success"))
+    .catch((error) => console.log("Error", error.message));
+};
 const Navbar = ({ setShowSelectWalletModal }) => {
   const { address, isConnected } = useAccount();
-  const addMumbai = () => {
-    let params = [
-      {
-        chainId: "0x13881",
-        chainName: "Mumbai",
-        nativeCurrency: {
-          name: "MATIC",
-          symbol: "MATIC",
-          decimals: 18,
-        },
-        rpcUrls: ["https://matic-mumbai.chainstacklabs.com"],
-        blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
-      },
-    ];
-    window.ethereum
-      .request({ method: "wallet_addEthereumChain", params })
-      .then(() => console.log("Success"))
-      .catch((error) => console.log("Error", error.message));
-  };
 
   return (
     <Container>
