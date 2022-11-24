@@ -1,4 +1,5 @@
 import React from "react";
+import { BsTwitter } from "react-icons/bs";
 import styled from "styled-components";
 import Button from "./Button";
 
@@ -28,6 +29,13 @@ const GameWonModal = ({ payoutAmount, setGameStarted }) => {
             Degen Again
           </Button>
         </ButtonContainer>
+        <MyLink
+          href="http://twitter.com/intent/tweet?text=Just%20played%20a%20few%20hands%20%40DegenJack.%20%0ATry%20your%20luck%20and%20stand%20a%20chance%20to%20win%20100%20USDC%21%20%0AGive%20it%20a%20try%20https%3A%2F%2Fdegenjack.xyz%0A"
+          target={"_blank"}
+        >
+          <BsTwitter />
+          Tweet about it
+        </MyLink>
         {/* <Link>I'd like to tip DegenJack</Link> */}
       </ModalContainer>
     </Container>
@@ -44,7 +52,14 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
+const MyLink = styled.a`
+  margin-top: 40px;
+  text-decoration: "none";
+  color: rgb(29, 155, 240);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
 const ModalContainer = styled.div`
   width: 620px;
   height: 395px;

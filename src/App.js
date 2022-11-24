@@ -36,7 +36,7 @@ function App() {
           <Route
             path="/"
             element={
-              <div className="App">
+              <div className="App" style={{ minHeight: "100vh" }}>
                 {gameStarted ? (
                   <Game setGameStarted={setGameStarted} />
                 ) : (

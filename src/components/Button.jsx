@@ -16,6 +16,7 @@ const Button = ({ children, variant, style, onClick, disabled }) => {
 const ButtonContainer = styled.button`
   display: flex;
   flex-direction: row;
+  gap: 8px;
   justify-content: center;
   align-items: center;
   padding: 18px 36px;

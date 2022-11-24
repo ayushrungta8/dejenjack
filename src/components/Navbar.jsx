@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useAccount } from "wagmi";
 import Button from "./Button";
 import { Link } from "react-router-dom";
+import { BsArrowUpRightSquare } from "react-icons/bs";
 const Navbar = ({ setShowSelectWalletModal }) => {
   const { address, isConnected } = useAccount();
   const addMumbai = () => {
@@ -61,6 +62,19 @@ const Navbar = ({ setShowSelectWalletModal }) => {
           onClick={() => addMumbai()}
         >
           Add Mumbai To Metamask
+        </Button>
+        <Button
+          variant="disabled"
+          style={{
+            marginRight: "12px",
+            border: "2px solid black",
+          }}
+          onClick={() =>
+            window.open(" https://faucet.polygon.technology/", "_blank")
+          }
+        >
+          Mumbai Faucet
+          <BsArrowUpRightSquare stroke="2" />
         </Button>
         <Button
           variant="primary"

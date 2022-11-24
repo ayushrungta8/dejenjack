@@ -442,6 +442,7 @@ const ContentContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  margin-top: 100px;
 `;
 const Left = styled.div`
   text-align: center;
