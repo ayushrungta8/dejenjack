@@ -26,7 +26,7 @@ const Game = ({ setGameStarted }) => {
   const [secondCard, setSecondCard] = useState(0);
   const [thirdCard, setThirdCard] = useState(0);
   const [higher, setHigher] = useState(null);
-  const [betAmount, setBetAmount] = useState(0);
+  const [betAmount, setBetAmount] = useState(0.01);
   const [firstPrediction, setFirstPrediction] = useState(null);
   const [secondPrediction, setSecondPrediction] = useState(null);
   const [choice, setChoice] = useState(0);
@@ -43,7 +43,7 @@ const Game = ({ setGameStarted }) => {
   const [ctaDisabled, setCtaDisabled] = useState(true);
   const [showLoader, setShowLoader] = useState(false);
   const [payoutAmount, setPayoutAmount] = useState(0);
-  const bets = [0.05, 0.1, 0.25, 0.5, 1.0, 2.0];
+  const bets = [];
 
   //web3 hooks
   const [contractLoaded, setContractLoaded] = useState(false);
@@ -131,7 +131,7 @@ const Game = ({ setGameStarted }) => {
     try {
       setShowLoader(true);
       await contractReader()().makeFirstBet(higher, {
-        value: ethers.utils.parseEther(betAmount.toString()),
+        value: ethers.utils.parseEther("0"),
       });
     } catch (err) {
       setShowLoader(false);
@@ -168,7 +168,10 @@ const Game = ({ setGameStarted }) => {
         setBetDisabled(false);
       }
     }
-    if (choice && betAmount.toString() !== "0") {
+    if (
+      choice
+      // && betAmount.toString() !== "0"
+    ) {
       console.log("choice", choice);
       console.log("betAmount", betAmount);
       setCtaDisabled(false);
@@ -344,7 +347,7 @@ const Game = ({ setGameStarted }) => {
               <TiArrowSortedDown color="#fff" size={40} />
             </ChoiceTypeIconContainer>
           </CardChoice>
-          <Title>For</Title>
+          {/* <Title>For</Title> */}
 
           <TipCardContainer>
             {bets.map((bet) => {
@@ -508,6 +511,7 @@ const CardChoice = styled.button`
   padding: 16px 32px;
   max-width: 320px;
   width: 100%;
+  gap: 16px;
   margin-bottom: 16px;
 `;
 const ChoiceType = styled.div`

@@ -31,18 +31,20 @@ const Landing = ({ setGameStarted }) => {
   });
 
   const switchToPolygon = () => {
-    console.log(chain?.id, "cirrent chain id");
+    console.log(chain?.id, "current chain id");
     console.log(switchNetwork, "switch network id");
     switchNetwork?.(80001);
+    setShowSwitchWalletModal(false);
   };
 
   useEffect(() => {
-    console.log(chain?.id, "cirrent chain id");
+    console.log(chain, isConnected, "current chain id in useEffect");
     if (isConnected && chain?.id !== 80001) {
       console.log("switch to polygon");
       setShowSwitchWalletModal(true);
     }
     if (chain?.id === 80001) {
+      console.log("closing modal");
       setShowSwitchWalletModal(false);
     }
   }, [chain, isConnected]);
@@ -116,6 +118,7 @@ const Landing = ({ setGameStarted }) => {
     </Container>
   );
 };
+
 const Container = styled.div``;
 const ContentContainer = styled.div`
   display: flex;

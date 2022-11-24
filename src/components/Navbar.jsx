@@ -5,6 +5,25 @@ import Button from "./Button";
 import { Link } from "react-router-dom";
 const Navbar = ({ setShowSelectWalletModal }) => {
   const { address, isConnected } = useAccount();
+  const addMumbai = () => {
+    let params = [
+      {
+        chainId: "0x13881",
+        chainName: "Mumbai",
+        nativeCurrency: {
+          name: "MATIC",
+          symbol: "MATIC",
+          decimals: 18,
+        },
+        rpcUrls: ["https://matic-mumbai.chainstacklabs.com"],
+        blockExplorerUrls: ["https://mumbai.polygonscan.com/"],
+      },
+    ];
+    window.ethereum
+      .request({ method: "wallet_addEthereumChain", params })
+      .then(() => console.log("Success"))
+      .catch((error) => console.log("Error", error.message));
+  };
 
   return (
     <Container>
@@ -15,18 +34,33 @@ const Navbar = ({ setShowSelectWalletModal }) => {
         {/* <Link>About</Link>
         <Link>FAQ's</Link>
         <Link>Leaderboard</Link> */}
-        <MyLink
+        {/* <MyLink
           href="https://docs.polygon.technology/docs/develop/metamask/config-polygon-on-metamask"
           target="_blank"
         >
           Add PolygonMumbai To Metamask
-        </MyLink>
+        </MyLink> */}
         <Button
           variant="disabled"
-          style={{ marginRight: "12px", border: "2px solid black" }}
-          onClick={() => window?.open("https://degenjack.xyz/#/nft", "_blank")}
+          style={{
+            marginRight: "12px",
+            border: "2px solid black",
+            cursor: "not-allowed",
+            opacity: "0.5",
+          }}
+          // onClick={() => window?.open("https://degenjack.xyz/#/nft", "_blank")}
         >
           Get NFT
+        </Button>
+        <Button
+          variant="disabled"
+          style={{
+            marginRight: "12px",
+            border: "2px solid black",
+          }}
+          onClick={() => addMumbai()}
+        >
+          Add Mumbai To Metamask
         </Button>
         <Button
           variant="primary"
