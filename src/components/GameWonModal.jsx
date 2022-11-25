@@ -9,7 +9,7 @@ const GameWonModal = ({ payoutAmount, setGameStarted }) => {
       <ModalContainer>
         <Emoji>🚀</Emoji>
         <ModalHeader>
-          Congratulations! You just won {payoutAmount} MATIC !
+          Congratulations! You just won!
         </ModalHeader>
         <Subtitle>Keep going and create a streak!</Subtitle>
 
